@@ -15,12 +15,10 @@
 // THEN I am prompted to enter the intern’s name, ID, email, and school, and I am taken back to the menu
 // WHEN I decide to finish building my team
 // THEN I exit the application, and the HTML is generated
-
-
-
+const Engineer = require('./lib/Engineer')
 const inquirer = require('inquirer')
 
-const manager = [
+const managerPrompt = [
     {
         name: "manager",
         message: "What is the manager's name?"
@@ -45,7 +43,7 @@ const manager = [
     }
 ]
 
-const engineer = [
+const engineerPrompt = [
     {
         name: "name",
         message: "What is the engineer's name?"
@@ -70,7 +68,7 @@ const engineer = [
     }
 ];
 
-const intern = [
+const internPrompt = [
     {
         name: "name",
         message: "What is the interns's name?"
@@ -100,7 +98,7 @@ const intern = [
 
 function managerQuestion() {
     const prompt = inquirer.createPromptModule()
-    prompt(manager)
+    prompt(managerPrompt)
     .then((data) => {
         switch (data.add) {
             case "Engineer":
@@ -118,7 +116,7 @@ function managerQuestion() {
 
 const engineerQuestion = function engineerQuestion() {
     const prompt = inquirer.createPromptModule()
-    prompt(engineer)
+    prompt(engineerPrompt)
     .then((data) => {
         switch (data.add) {
             case "Engineer":
@@ -129,6 +127,8 @@ const engineerQuestion = function engineerQuestion() {
                 return
             case "No, finish building my team":
                 //need to add refernce to function that writes the HTML file
+                const newEngineer = new Engineer(data.name, data.id, data.email, data.github);
+                 console.log(newEngineer)
                 return
         }
     })
@@ -136,7 +136,7 @@ const engineerQuestion = function engineerQuestion() {
 
 const internQuestion = function internQuestion() {
     const prompt = inquirer.createPromptModule()
-    prompt(intern)
+    prompt(internPrompt)
     .then((data) => {
         switch (data.add) {
             case "Engineer":
@@ -205,3 +205,6 @@ managerQuestion()
 // * `getSchool()`
 
 // * `getRole()`&mdash;overridden to return `'Intern'`
+
+
+// module.exports = index;
