@@ -15,12 +15,14 @@
 // THEN I am prompted to enter the intern’s name, ID, email, and school, and I am taken back to the menu
 // WHEN I decide to finish building my team
 // THEN I exit the application, and the HTML is generated
-const Engineer = require('./lib/Engineer')
-const inquirer = require('inquirer')
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+const Manager = require('./lib/Manager')
+const inquirer = require('inquirer');
 
 const managerPrompt = [
     {
-        name: "manager",
+        name: "name",
         message: "What is the manager's name?"
     },
     {
@@ -32,7 +34,7 @@ const managerPrompt = [
         message: "What is the manager's email?"
     },
     {
-        name: "officeNumber",
+        name: "number",
         message: "What is the manager's office number?"
     },
     {
@@ -62,6 +64,12 @@ const engineerPrompt = [
     },
     {
         type: "list",
+        name: "saveEng",
+        message: "Would you like save this memeber?",
+        choices: ["Yes", "No"]
+    },
+    {
+        type: "list",
         name: "add",
         message: "Would you like to add to your team?",
         choices: ["Engineer", "Intern", "No, finish building my team"]
@@ -87,6 +95,12 @@ const internPrompt = [
     },
     {
         type: "list",
+        name: "saveInt",
+        message: "Would you like save this memeber?",
+        choices: ["Yes", "No"]
+    },
+    {
+        type: "list",
         name: "add",
         message: "Would you like to add to your team?",
         choices: ["Engineer", "Intern", "No, finish building my team"]
@@ -100,111 +114,81 @@ function managerQuestion() {
     const prompt = inquirer.createPromptModule()
     prompt(managerPrompt)
     .then((data) => {
+    
+    const newManager = new Manager(data.name, data.id, data.email, data.number);
+    arr.push({newManager})
+    console.log(arr)
+    
         switch (data.add) {
             case "Engineer":
                 engineerQuestion();
-                return;
-            case "Intern":
+                break;
+                case "Intern":
                 internQuestion();
-                return
-            case "No, finish building my team":
-                //need to add refernce to function that writes the HTML file
-                return
+                break;
+                case "No, finish building my team":
+                    //need to add refernce to function that writes the HTML file
+                    return;
+                }
+            })
         }
-    })
-}
+        
+managerQuestion()
+
+const arr = []
 
 const engineerQuestion = function engineerQuestion() {
-    const prompt = inquirer.createPromptModule()
-    prompt(engineerPrompt)
-    .then((data) => {
-        switch (data.add) {
-            case "Engineer":
+
+const prompt = inquirer.createPromptModule()
+prompt(engineerPrompt)
+.then((data) => {
+    switch (data.saveEng) {
+        case "Yes":
+            const newEngineer = new Engineer(data.name, data.id, data.email, data.github);
+            arr.push({newEngineer})
+            console.log(arr)
+            break;
+        case "No":
+            return;
+    }
+    switch (data.add) {
+        case "Engineer":
                 engineerQuestion();
-                return;
+                break;
             case "Intern":
                 internQuestion();
-                return
+                break;
             case "No, finish building my team":
                 //need to add refernce to function that writes the HTML file
-                const newEngineer = new Engineer(data.name, data.id, data.email, data.github);
-                 console.log(newEngineer)
-                return
-        }
-    })
+                return;
+            }
+})
 }
+
 
 const internQuestion = function internQuestion() {
     const prompt = inquirer.createPromptModule()
     prompt(internPrompt)
     .then((data) => {
-        switch (data.add) {
-            case "Engineer":
-                engineerQuestion();
-                return;
-            case "Intern":
-                internQuestion();
-                return
-            case "No, finish building my team":
-                //need to add refernce to function that writes the HTML file
-                return
-        }
+            switch (data.saveInt) {
+                case "Yes":
+                    const newIntern = new Intern(data.name, data.id, data.email, data.school);
+                    arr.push({newIntern})
+                    console.log(arr)
+                    break;
+                case "No":
+                    return;
+            }
+            switch (data.add) {
+                case "Engineer":
+                        engineerQuestion();
+                        break;
+                    case "Intern":
+                        internQuestion();
+                        break;
+                    case "No, finish building my team":
+                        //need to add refernce to function that writes the HTML file
+                        return;
+                    }
     })
 }
-
-managerQuestion()
-
-
-
-// function init() {
-//     const prompt = inquirer.createPromptModule()
-//     prompt(questions)
-//     .then((data) => {
-//         fs.appendFile('README.md', generateMarkdown(data), (err) =>
-//         err ? console.error(err) : console.log('Commit logged!')
-//       );
-//     }) 
-// }
-
-// The first class is an `Employee` parent class with the following properties and methods:
-
-// * `name`
-
-// * `id`
-
-// * `email`
-
-// * `getName()`
-
-// * `getId()`
-
-// * `getEmail()`
-
-// * `getRole()`&mdash;returns `'Employee'`
-
-// The other three classes will extend `Employee`.
-
-// In addition to `Employee`'s properties and methods, `Manager` will also have the following:
-
-// * `officeNumber`
-
-// * `getRole()`&mdash;overridden to return `'Manager'`
-
-// In addition to `Employee`'s properties and methods, `Engineer` will also have the following:
-
-// * `github`&mdash;GitHub username
-
-// * `getGithub()`
-
-// * `getRole()`&mdash;overridden to return `'Engineer'`
-
-// In addition to `Employee`'s properties and methods, `Intern` will also have the following:
-
-// * `school`
-
-// * `getSchool()`
-
-// * `getRole()`&mdash;overridden to return `'Intern'`
-
-
-// module.exports = index;
