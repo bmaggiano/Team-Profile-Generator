@@ -190,7 +190,7 @@ const internQuestion = function internQuestion() {
                         break;
                     case "No, finish building my team":
                         //need to add refernce to function that writes the HTML file
-                        fs.appendFile('index.html', generateManager(), (err) =>
+                        fs.appendFile('index.html', generateManager(arr), (err) =>
                         err ? console.error(err) : console.log('Commit logged!')
                       );
                         return;
@@ -199,21 +199,41 @@ const internQuestion = function internQuestion() {
 }
 
 
-const generateManager = () => {
-    let text = ""
-    for (let i = 0; i < arr.length; i++) {
-        text += arr[i].name;
-}
+const generateManager = (arr) => {
+    
+//     for (let i = 0; i < arr.length; i++) {
+//         text = arr[i].name;
+// }
 return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <title>Team Profile Generator</title>
 </head>
 <body>
-    <h1>${text}</h1>
+
+
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">${arr[0].name}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">${arr[0].id}</h6>
+          <p class="card-text">${arr[0].email}</p>
+          <a href="#" class="card-link">${arr[0].number}</a>
+        </div>
+      </div>
+
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">${arr[1].name}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">${arr[1].id}</h6>
+          <p class="card-text">${arr[1].email}</p>
+          <a href="#" class="card-link">${arr[1].school}</a>
+        </div>
+      </div>
+
 </body>
 </html>`
 }
