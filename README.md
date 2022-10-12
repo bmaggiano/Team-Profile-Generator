@@ -12,8 +12,11 @@ Installation requires a user to run npm i to install the necessary dependencies 
 
 ## Screenshots/Videos
 
+[Team Project Generator Demo.webm](https://user-images.githubusercontent.com/103971233/195466183-ddc85fe0-b205-475c-8a58-e242c7800fe1.webm)
 
+[Team Project Generator Pass Test.webm](https://user-images.githubusercontent.com/103971233/195466190-61055098-16b7-4fc7-a029-74fceab6511d.webm)
 
+![image](https://user-images.githubusercontent.com/103971233/195466392-48023b57-a2b0-481e-bd36-7e690f6debd8.png)
 
 ## Credits
 
