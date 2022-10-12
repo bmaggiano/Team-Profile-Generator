@@ -1,23 +1,7 @@
-// GIVEN a command-line application that accepts user input
-// WHEN I am prompted for my team members and their information
-// THEN an HTML file is generated that displays a nicely formatted team roster based on user input
-// WHEN I click on an email address in the HTML
-// THEN my default email program opens and populates the TO field of the email with the address
-// WHEN I click on the GitHub username
-// THEN that GitHub profile opens in a new tab
-// WHEN I start the application
-// THEN I am prompted to enter the team manager’s name, employee ID, email address, and office number
-// WHEN I enter the team manager’s name, employee ID, email address, and office number
-// THEN I am presented with a menu with the option to add an engineer or an intern or to finish building my team
-// WHEN I select the engineer option
-// THEN I am prompted to enter the engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
-// WHEN I select the intern option
-// THEN I am prompted to enter the intern’s name, ID, email, and school, and I am taken back to the menu
-// WHEN I decide to finish building my team
-// THEN I exit the application, and the HTML is generated
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
-const Manager = require('./lib/Manager')
+const Manager = require('./lib/Manager');
+const Employee = require('./lib/Employee')
 const inquirer = require('inquirer');
 const fs = require('fs')
 
@@ -108,16 +92,13 @@ const internPrompt = [
     }
 ];
 
-
-// Create a function to initialize app
-
 function managerQuestion() {
     const prompt = inquirer.createPromptModule()
     prompt(managerPrompt)
     .then((data) => {
     const newManager = new Manager(data.name, data.id, data.email, data.number);
-    arr.push(newManager)
-    console.log(arr)
+    managerArr.push(newManager)
+    console.log(managerArr)
     
         switch (data.add) {
             case "Engineer":
@@ -127,15 +108,15 @@ function managerQuestion() {
                 internQuestion();
                 break;
                 case "No, finish building my team":
-                    //need to add refernce to function that writes the HTML file
                     return;
                 }
             })
         }
         
 managerQuestion()
-
-const arr = []
+const managerArr = []
+const engineerArr = []
+const internArr = []
 
 const engineerQuestion = function engineerQuestion() {
 
@@ -145,8 +126,8 @@ prompt(engineerPrompt)
     switch (data.saveEng) {
         case "Yes":
             const newEngineer = new Engineer(data.name, data.id, data.email, data.github);
-            arr.push(newEngineer)
-            console.log(arr)
+            engineerArr.push(newEngineer)
+            console.log(engineerArr)
             break;
         case "No":
             return;
@@ -160,13 +141,12 @@ prompt(engineerPrompt)
                 break;
             case "No, finish building my team":
                 //need to add refernce to function that writes the HTML file
-                fs.appendFile('index.html', generateManager(), (err) =>
+                fs.appendFile('index.html', generateHTML(), (err) =>
                 err ? console.error(err) : console.log('Commit logged!'));
                 return;
             }
 })
 }
-
 
 const internQuestion = function internQuestion() {
     const prompt = inquirer.createPromptModule()
@@ -175,8 +155,8 @@ const internQuestion = function internQuestion() {
             switch (data.saveInt) {
                 case "Yes":
                     const newIntern = new Intern(data.name, data.id, data.email, data.school);
-                    arr.push(newIntern)
-                    console.log(arr)
+                    internArr.push(newIntern)
+                    console.log(internArr)
                     break;
                 case "No":
                     return;
@@ -190,7 +170,7 @@ const internQuestion = function internQuestion() {
                         break;
                     case "No, finish building my team":
                         //need to add refernce to function that writes the HTML file
-                        fs.appendFile('index.html', generateManager(arr), (err) =>
+                        fs.appendFile('./dist/index.html', generateHTML(), (err) =>
                         err ? console.error(err) : console.log('Commit logged!')
                       );
                         return;
@@ -198,12 +178,7 @@ const internQuestion = function internQuestion() {
     })
 }
 
-
-const generateManager = (arr) => {
-    
-//     for (let i = 0; i < arr.length; i++) {
-//         text = arr[i].name;
-// }
+const generateHTML = () => {
 return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -211,28 +186,61 @@ return `<!DOCTYPE html>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
     <title>Team Profile Generator</title>
 </head>
 <body>
 
+  <header>
+    <h1>MY TEAM</h1>
+  </header>
 
-    <div class="card" style="width: 18rem;">
+<main class="flex row justify-content-center my-5">
+    <div class="card" style="width: 22rem;">
         <div class="card-body">
-          <h5 class="card-title">${arr[0].name}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">${arr[0].id}</h6>
-          <p class="card-text">${arr[0].email}</p>
-          <a href="#" class="card-link">${arr[0].number}</a>
+          <h5 class="card-title">Manager: ${managerArr[0].name}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">ID: ${managerArr[0].id}</h6>
+          <a href"#" class="card-text">${managerArr[0].number}</a><br>
+          <a href="mailto:${managerArr[0].email}" class="card-link">Email: ${managerArr[0].email}</a>
         </div>
       </div>
 
-    <div class="card" style="width: 18rem;">
+      <div class="card" style="width: 22rem;">
         <div class="card-body">
-          <h5 class="card-title">${arr[1].name}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">${arr[1].id}</h6>
-          <p class="card-text">${arr[1].email}</p>
-          <a href="#" class="card-link">${arr[1].school}</a>
+          <h5 class="card-title">Engineer: ${engineerArr[0].name}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">ID: ${engineerArr[0].id}</h6>
+          <a href="https://github.com/${engineerArr[0].github}" class="card-text">Click here for Github profile!</a><br>
+          <a href="mailto:${managerArr[0].email}" class="card-link">Email: ${engineerArr[0].email}</a>
         </div>
       </div>
+
+      <div class="card" style="width: 22rem;">
+        <div class="card-body">
+          <h5 class="card-title">Engineer: ${engineerArr[1].name}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">ID: ${engineerArr[1].id}</h6>
+          <a href="https://github.com/${engineerArr[1].github}" class="card-text">Click here for Github profile!</a><br>
+          <a href="mailto:${managerArr[0].email}" class="card-link">Email: ${engineerArr[1].email}</a>
+        </div>
+      </div>
+
+      <div class="card" style="width: 22rem;">
+      <div class="card-body">
+        <h5 class="card-title">${internArr[0].name}: Intern</h5>
+        <h6 class="card-subtitle mb-2 text-muted">ID: ${internArr[0].id}</h6>
+        <p class="card-text">School: ${internArr[0].school}</p>
+        <a href="mailto:${internArr[0].email}" class="card-link">Email: ${internArr[0].email}</a>
+      </div>
+    </div>
+      <div class="card" style="width: 22rem;">
+      <div class="card-body">
+        <h5 class="card-title">${internArr[1].name}: Intern</h5>
+        <h6 class="card-subtitle mb-2 text-muted">ID: ${internArr[1].id}</h6>
+        <p class="card-text">School: ${internArr[1].school}</p>
+        <a href="mailto:${internArr[1].email}" class="card-link">Email: ${internArr[1].email}</a>
+      </div>
+    </div>
+</main>    
+
 
 </body>
 </html>`
