@@ -19,6 +19,7 @@ const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager')
 const inquirer = require('inquirer');
+const fs = require('fs')
 
 const managerPrompt = [
     {
@@ -114,9 +115,8 @@ function managerQuestion() {
     const prompt = inquirer.createPromptModule()
     prompt(managerPrompt)
     .then((data) => {
-    
     const newManager = new Manager(data.name, data.id, data.email, data.number);
-    arr.push({newManager})
+    arr.push(newManager)
     console.log(arr)
     
         switch (data.add) {
@@ -145,7 +145,7 @@ prompt(engineerPrompt)
     switch (data.saveEng) {
         case "Yes":
             const newEngineer = new Engineer(data.name, data.id, data.email, data.github);
-            arr.push({newEngineer})
+            arr.push(newEngineer)
             console.log(arr)
             break;
         case "No":
@@ -160,6 +160,8 @@ prompt(engineerPrompt)
                 break;
             case "No, finish building my team":
                 //need to add refernce to function that writes the HTML file
+                fs.appendFile('index.html', generateManager(), (err) =>
+                err ? console.error(err) : console.log('Commit logged!'));
                 return;
             }
 })
@@ -173,7 +175,7 @@ const internQuestion = function internQuestion() {
             switch (data.saveInt) {
                 case "Yes":
                     const newIntern = new Intern(data.name, data.id, data.email, data.school);
-                    arr.push({newIntern})
+                    arr.push(newIntern)
                     console.log(arr)
                     break;
                 case "No":
@@ -188,7 +190,29 @@ const internQuestion = function internQuestion() {
                         break;
                     case "No, finish building my team":
                         //need to add refernce to function that writes the HTML file
+                        fs.appendFile('index.html', generateManager(), (err) =>
+                        err ? console.error(err) : console.log('Commit logged!')
+                      );
                         return;
                     }
     })
+}
+
+
+const generateManager = () => {
+    return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>${arr[0].name}</h1>
+        <h2>${arr[0].id}</h2>
+        <h2>${arr[0].email}</h2>
+        <h2>${arr[0].number}</h2>
+    </body>
+    </html>`
 }
